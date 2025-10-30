@@ -1,6 +1,6 @@
 import { normalizeUrl } from './normalize-url'
 
-export async function getRequestCacheKey(request) {
+export async function getRequestCacheKey(request: Request): Promise<Request | null> {
   try {
     // Respect "pragma: no-cache" header
     const pragma = request.headers.get('pragma')
@@ -26,9 +26,7 @@ export async function getRequestCacheKey(request) {
     const normalizedUrl = normalizeUrl(url)
 
     if (url !== normalizedUrl) {
-      return normalizeRequestHeaders(
-        new Request(normalizedUrl, { method: request.method })
-      )
+      return normalizeRequestHeaders(new Request(normalizedUrl, { method: request.method }))
     }
 
     return normalizeRequestHeaders(new Request(request))
@@ -43,10 +41,10 @@ const requestHeaderWhitelist = new Set([
   'accept',
   'accept-encoding',
   'accept-language',
-  'user-agent'
+  'user-agent',
 ])
 
-function normalizeRequestHeaders(request) {
+function normalizeRequestHeaders(request: Request): Request {
   const headers = Object.fromEntries(request.headers.entries())
   const keys = Object.keys(headers)
 

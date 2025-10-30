@@ -1,5 +1,5 @@
 name = "cf-image-proxy"
-main = "dist/main.js"
+main = "src/index.ts"
 account_id = "YOUR_ACCOUNT_ID"
 compatibility_date = "2025-10-30"
 workers_dev = false

@@ -1,18 +1,17 @@
+import type { EventLike } from './types'
+
 const notionImagePrefix = 'https://www.notion.so/image/'
 
-/**
- * @param {*} event
- * @param {*} request
- */
-export async function resolveRequest(event, request) {
+export async function resolveRequest(
+  _event: EventLike,
+  request: Request
+): Promise<{ originReq: Request }> {
   const requestUrl = new URL(request.url)
   let originUri = decodeURIComponent(requestUrl.pathname.slice(1))
 
   // special-case optimization for notion images coming from unsplash
   if (originUri.startsWith(notionImagePrefix)) {
-    const imageUri = decodeURIComponent(
-      originUri.slice(notionImagePrefix.length)
-    )
+    const imageUri = decodeURIComponent(originUri.slice(notionImagePrefix.length))
     const imageUrl = new URL(imageUri)
 
     // adjust unsplash defaults to have a max width and intelligent format conversion
@@ -20,7 +19,7 @@ export async function resolveRequest(event, request) {
       const { searchParams } = imageUrl
 
       if (!searchParams.has('w') && !searchParams.has('fit')) {
-        imageUrl.searchParams.set('w', 1920)
+        imageUrl.searchParams.set('w', '1920')
         imageUrl.searchParams.set('fit', 'max')
       }
 
@@ -28,9 +27,7 @@ export async function resolveRequest(event, request) {
         imageUrl.searchParams.set('auto', 'format')
       }
 
-      originUri = `${notionImagePrefix}${encodeURIComponent(
-        imageUrl.toString()
-      )}`
+      originUri = `${notionImagePrefix}${encodeURIComponent(imageUrl.toString())}`
     }
   }
 

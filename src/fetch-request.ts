@@ -1,3 +1,4 @@
+import type { EventLike } from './types'
 import * as globalHeaders from './global-res-headers'
 
 const headerWhitelist = new Set([
@@ -8,10 +9,13 @@ const headerWhitelist = new Set([
   'cf-polished',
   'date',
   'status',
-  'transfer-encoding'
+  'transfer-encoding',
 ])
 
-export async function fetchRequest(event, { originReq }) {
+export async function fetchRequest(
+  _event: EventLike,
+  { originReq }: { originReq: Request }
+): Promise<Response> {
   // const originRes = await fetch(originReq)
 
   // console.log(
@@ -23,9 +27,9 @@ export async function fetchRequest(event, { originReq }) {
   const originRes = await fetch(originReq, {
     cf: {
       polish: 'lossy',
-      cacheEverything: true
+      cacheEverything: true,
     },
-    redirect: 'follow'
+    redirect: 'follow',
   })
 
   // Construct a new response so we can mutate its headers
@@ -51,7 +55,7 @@ export async function fetchRequest(event, { originReq }) {
   return res
 }
 
-function normalizeResponseHeaders(res) {
+function normalizeResponseHeaders(res: Response): Response {
   const headers = Object.fromEntries(res.headers.entries())
   const keys = Object.keys(headers)
 
