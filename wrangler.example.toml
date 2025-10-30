@@ -1,0 +1,9 @@
+name = "cf-image-proxy"
+main = "dist/main.js"
+account_id = "YOUR_ACCOUNT_ID"
+compatibility_date = "2025-10-30"
+workers_dev = false
+
+[[routes]]
+pattern = "YOUR_DOMAIN_NAME" # e.g. my.example.com
+custom_domain = true

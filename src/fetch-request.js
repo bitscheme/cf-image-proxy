@@ -24,7 +24,8 @@ export async function fetchRequest(event, { originReq }) {
     cf: {
       polish: 'lossy',
       cacheEverything: true
-    }
+    },
+    redirect: 'follow'
   })
 
   // Construct a new response so we can mutate its headers
