@@ -13,7 +13,7 @@
   "scripts": {
     "dev": "wrangler dev",
     "preview": "wrangler dev --remote",
-    "build": "wrangler build",
+    "build": "wrangler deploy --dry-run",
     "deploy": "wrangler deploy",
     "test": "vitest",
     "lint": "biome lint .",
