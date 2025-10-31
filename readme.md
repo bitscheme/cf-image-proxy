@@ -1,8 +1,21 @@
 # CF Image proxy
 
+A modernized, simple image proxy and CDN utilizing Cloudflare Workers.
+
+Based on a fork of [cf-image-proxy](https://github.com/transitive-bullshit/cf-image-proxy)
+
+Modernized with:
+
+- 🎨 **Biome** - Modern linting and formatting
+- 📘 **TypeScript** - Type-safe development
+- ⚡ **ES2022** - Latest JavaScript features
+- 🧪 **Vitest** - Fast unit testing
+- 🔧 **Miniflare** - Local development server
+- 📦 **ESM** - Native ES modules
+
 > Image proxy and CDN for [Cloudflare Workers](https://workers.cloudflare.com).
 
-[![Build Status](https://github.com/transitive-bullshit/cf-image-proxy/actions/workflows/build.yml/badge.svg)](https://github.com/transitive-bullshit/cf-image-proxy/actions/workflows/build.yml) [![Code Style: Biome](https://img.shields.io/badge/code_style-biome-60a5fa.svg)](https://biomejs.dev)
+[![Code Style: Biome](https://img.shields.io/badge/code_style-biome-60a5fa.svg)](https://biomejs.dev)
 
 ## Features
 
@@ -14,31 +27,27 @@
 - Respects `pragma: no-cache` and related headers
 - Used in hundreds of prod sites
 
-## Setup
+## Quick Setup
 
-1. Create a new blank [Cloudflare Worker](https://workers.cloudflare.com) or prepare a route and custom domain.
-2. Fork / clone this repo
+1. Fork or clone this repo
+2. `cp wrangler.example.toml wrangler.toml`
 3. Update the missing values in [wrangler.toml](./wrangler.toml)
-4. `npm install`
-5. `npm run dev` to test locally with Wrangler (Miniflare)
-6. `npm run preview` to test against the edge runtime
-7. `npm run deploy` to deploy to Cloudflare Workers 💪
+4. `npm i`
+5. `npm run deploy` to deploy to Cloudflare Workers 💪
 
 ### wrangler.toml
 
 ```toml
 name = "cf-image-proxy"
 main = "src/index.js"
-account_id = "TODO"
+account_id = "TODO" # Cloudflare Workers dashboard settings.
 workers_dev = true
 compatibility_date = "2025-10-30"
 
 [[routes]]
-pattern = "TODO" # e.g. my.example.com
-custom_domain = true
+pattern = "TODO" # e.g. img.example.com
+custom_domain = true # auto creates Cloudflare DNS records for you
 ```
-
-You can find your `account_id` in your Cloudflare Workers settings.
 
 ### Cloudflare Polish
 
@@ -56,9 +65,14 @@ If you want to change this `cache-control` header or add additional headers, see
 
 The project uses [Biome](https://biomejs.dev) for linting and formatting. Available commands:
 
+- `npm run dev` - Start a local dev server with Wrangler (Miniflare)
 - `npm test` - Run tests with Vitest
 - `npm run lint` - Check for linting issues
+- `npm run preview` - Preview the worker in the Cloudflare edge runtime
+- `npm run deploy` - Builds and deploy the worker to Cloudflare
+- `npm run build` - Perform a dry-run build of the worker
 - `npm run format` - Format all files
+- `npm run lint` - Check for linting issues
 - `npm run typecheck` - Run TypeScript type checking
 
 ## Usage
@@ -91,14 +105,11 @@ export const mapImageUrl = (imageUrl: string) => {
 A few notes about the implementation:
 
 - It is hosted via Cloudflare (CF) edge [workers](https://workers.cloudflare.com).
-- It is bundled by Wrangler (esbuild/workerd) before uploading to CF.
 - CF runs our worker via V8 directly in an environment mimicking [web workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API).
-- This means that our worker does not have access to Node.js primitives such as `fs`, `dns` and `http`.
 - It does have access to a custom [web fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
 
 ## TODO
 
-- [x] Initial release extracted from Notion2Site
 - [ ] Support restricting the origin domain in order to prevent abuse
 - [ ] Add a snazzy demo
 

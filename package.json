@@ -2,9 +2,10 @@
   "name": "cf-image-proxy",
   "private": true,
   "description": "Proxy CDN for caching static assets from third-party domains via Cloudflare Workers.",
-  "author": "Travis Fischer <travis@transitivebullsh.it>",
+  "author": {
+    "name": "James Holcomb"
+  },
   "repository": "bitscheme/cf-image-proxy",
-  "homepage": "https://transitivebullsh.it",
   "license": "MIT",
   "type": "module",
   "engines": {
