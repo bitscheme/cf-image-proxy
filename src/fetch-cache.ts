@@ -1,9 +1,18 @@
-const cache = caches.default
+import type { EventLike } from './types'
 
-export async function fetchCache(opts) {
+// biome-ignore lint/suspicious/noExplicitAny: caches.default is not typed in standard lib
+const cache = (caches as any).default as Cache
+
+interface FetchCacheOptions {
+  event: EventLike
+  cacheKey: Request | null
+  fetch: () => Promise<Response>
+}
+
+export async function fetchCache(opts: FetchCacheOptions): Promise<Response> {
   const { event, cacheKey, fetch: fetchResponse } = opts
 
-  let response
+  let response: Response | undefined
 
   if (cacheKey) {
     console.log('cacheKey', cacheKey.url)

@@ -34,8 +34,9 @@ yarn-error.log*
 
 # toml
 wrangler.toml
+.wrangler/
 
 # vercel
 .vercel
 
-dist/
+

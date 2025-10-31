@@ -6,8 +6,13 @@
  * - removed unused options
  * - removed dataURL support
  */
-export const normalizeUrl = (urlString) => {
-  const urlObj = new URL(urlString)
+export const normalizeUrl = (urlString: string): string => {
+  let urlObj: URL
+  try {
+    urlObj = new URL(urlString)
+  } catch (_error) {
+    throw new Error(`Invalid URL: ${urlString}`)
+  }
 
   if (urlObj.protocol === 'http:') {
     urlObj.protocol = 'https:'
@@ -45,14 +50,14 @@ export const normalizeUrl = (urlString) => {
   // Remove trailing `/`
   urlObj.pathname = urlObj.pathname.replace(/\/$/, '')
 
-  urlString = urlObj.toString()
+  let result = urlObj.toString()
 
   // Remove trailing `/` for real this time
   if (urlObj.pathname === '/' && urlObj.hash === '') {
-    urlString = urlString.replace(/\/$/, '')
+    result = result.replace(/\/$/, '')
   }
 
-  urlString = urlString.replace(/https:%2F%2F/g, 'https%3A%2F%2F')
+  result = result.replace(/https:%2F%2F/g, 'https%3A%2F%2F')
 
-  return urlString
+  return result
 }

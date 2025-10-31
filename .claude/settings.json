@@ -1,8 +1,6 @@
 {
   "permissions": {
-    "allow": [
-      "WebFetch(https://*)"
-    ],
+    "allow": ["WebFetch(https://*)"],
     "deny": [],
     "ask": []
   }

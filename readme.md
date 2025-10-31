@@ -1,8 +1,21 @@
 # CF Image proxy
 
+A modernized, simple image proxy and CDN utilizing Cloudflare Workers.
+
+Based on a fork of [cf-image-proxy](https://github.com/transitive-bullshit/cf-image-proxy)
+
+Modernized with:
+
+- 🎨 **Biome** - Modern linting and formatting
+- 📘 **TypeScript** - Type-safe development
+- ⚡ **ES2022** - Latest JavaScript features
+- 🧪 **Vitest** - Fast unit testing
+- 🔧 **Miniflare** - Local development server
+- 📦 **ESM** - Native ES modules
+
 > Image proxy and CDN for [Cloudflare Workers](https://workers.cloudflare.com).
 
-[![Build Status](https://github.com/transitive-bullshit/cf-image-proxy/actions/workflows/build.yml/badge.svg)](https://github.com/transitive-bullshit/cf-image-proxy/actions/workflows/build.yml) [![Prettier Code Formatting](https://img.shields.io/badge/code_style-prettier-brightgreen.svg)](https://prettier.io)
+[![Code Style: Biome](https://img.shields.io/badge/code_style-biome-60a5fa.svg)](https://biomejs.dev)
 
 ## Features
 
@@ -14,32 +27,27 @@
 - Respects `pragma: no-cache` and related headers
 - Used in hundreds of prod sites
 
-## Setup
+## Quick Setup
 
-1. Create a new blank [Cloudflare Worker](https://workers.cloudflare.com).
-2. Fork / clone this repo
+1. Fork or clone this repo
+2. `cp wrangler.example.toml wrangler.toml`
 3. Update the missing values in [wrangler.toml](./wrangler.toml)
-4. `npm install`
-5. `npm run dev` to test locally
-6. `npm run deploy` to deploy to cloudflare workers 💪
+4. `npm i`
+5. `npm run deploy` to deploy to Cloudflare Workers 💪
 
 ### wrangler.toml
 
-```yaml
+```toml
 name = "cf-image-proxy"
-type = "javascript"
-webpack_config = "webpack.config.js"
-account_id = "TODO"
+main = "src/index.js"
+account_id = "TODO" # Cloudflare Workers dashboard settings.
 workers_dev = true
+compatibility_date = "2025-10-30"
 
-[env.production]
-zone_id = "TODO"
-route = "TODO"
+[[routes]]
+pattern = "TODO" # e.g. img.example.com
+custom_domain = true # auto creates Cloudflare DNS records for you
 ```
-
-You can find your `account_id` and `zone_id` in your Cloudflare Workers settings.
-
-Your `route` should look like `"exampledomain.com/*"`.
 
 ### Cloudflare Polish
 
@@ -53,13 +61,21 @@ By default, all assets will be served with a `cache-control` header set to `publ
 
 If you want to change this `cache-control` header or add additional headers, see [src/fetch-request.js](./src/fetch-request.js).
 
+## Development
+
+The project uses [Biome](https://biomejs.dev) for linting and formatting. Available commands:
+
+- `npm run dev` - Start a local dev server with Wrangler (Miniflare)
+- `npm test` - Run tests with Vitest
+- `npm run lint` - Check for linting issues
+- `npm run preview` - Preview the worker in the Cloudflare edge runtime
+- `npm run deploy` - Builds and deploy the worker to Cloudflare
+- `npm run build` - Perform a dry-run build of the worker
+- `npm run format` - Format all files
+- `npm run lint` - Check for linting issues
+- `npm run typecheck` - Run TypeScript type checking
+
 ## Usage
-
-### Next.js Notion Starter Kit
-
-If you're using this image proxy as part of [nextjs-notion-starter-kit](https://github.com/transitive-bullshit/nextjs-notion-starter-kit), all you need to do is set `imageCDNHost` in your `site.config.js` and your image proxy will be used automatically.
-
-If you're not using this Next.js Notion boilerplate, then read on.
 
 ### General Usage
 
@@ -89,14 +105,11 @@ export const mapImageUrl = (imageUrl: string) => {
 A few notes about the implementation:
 
 - It is hosted via Cloudflare (CF) edge [workers](https://workers.cloudflare.com).
-- It is transpiled by webpack before uploading to CF.
 - CF runs our worker via V8 directly in an environment mimicking [web workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API).
-- This means that our worker does not have access to Node.js primitives such as `fs`, `dns` and `http`.
 - It does have access to a custom [web fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
 
 ## TODO
 
-- [x] Initial release extracted from Notion2Site
 - [ ] Support restricting the origin domain in order to prevent abuse
 - [ ] Add a snazzy demo
 
