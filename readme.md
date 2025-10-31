@@ -31,21 +31,23 @@ Modernized with:
 
 1. Fork or clone this repo
 2. `cp wrangler.example.toml wrangler.toml`
-3. Update the missing values in [wrangler.toml](./wrangler.toml)
-4. `npm i`
-5. `npm run deploy` to deploy to Cloudflare Workers 💪
+3. `npx wrangler login` to authenticate with your Cloudflare account
+4. `npx wrangler whoami` to get your `account_id`
+5. Update the missing values in [wrangler.toml](./wrangler.toml)
+6. `npm i`
+7. `npm run deploy` to deploy to Cloudflare Workers 💪
 
 ### wrangler.toml
 
 ```toml
 name = "cf-image-proxy"
 main = "src/index.js"
-account_id = "TODO" # Cloudflare Workers dashboard settings.
+account_id = "YOUR_ACCOUNT_ID"
 workers_dev = true
 compatibility_date = "2025-10-30"
 
 [[routes]]
-pattern = "TODO" # e.g. img.example.com
+pattern = "YOUR_DOMAIN" # e.g. img.example.com
 custom_domain = true # auto creates Cloudflare DNS records for you
 ```
 
